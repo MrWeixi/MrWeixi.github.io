@@ -69,8 +69,10 @@
 
 
 
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xxfavicon.ico?v=5.1.4">
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/function%20small()%20%7B%20%5Bnative%20code%5D%20%7D?v=5.1.4">
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xfavicon.ico?v=5.1.4">
 
 
 
@@ -90,14 +92,14 @@
 
 
 
-<meta name="description" content="写尽千山 落笔是你">
+<meta name="description" content="前言闭包(closure)是JavaScript语言的一个难点，也是它的特色，很多高级应用都要依靠闭包实现   变量的作用域  *要理解闭包，首先必须理解JavaScript特殊的变量作用域  变量的作用域无非就两种： 全局变量和局部作用域  JavaJcript语言的特殊之处，就在于函数内部可以直接读取全局变量   12345 var nb&#x3D;111;function fn()&amp;#123;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JS关于闭包问题">
 <meta property="og:url" content="http://yoursite.com/2019/01/19/%E5%85%B3%E4%BA%8E%E9%97%AD%E5%8C%85%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="前端圈圈">
-<meta property="og:description" content="写尽千山 落笔是你">
+<meta property="og:description" content="前言闭包(closure)是JavaScript语言的一个难点，也是它的特色，很多高级应用都要依靠闭包实现   变量的作用域  *要理解闭包，首先必须理解JavaScript特殊的变量作用域  变量的作用域无非就两种： 全局变量和局部作用域  JavaJcript语言的特殊之处，就在于函数内部可以直接读取全局变量   12345 var nb&#x3D;111;function fn()&amp;#123;">
 <meta property="article:published_time" content="2019-01-19T00:29:00.000Z">
-<meta property="article:modified_time" content="2020-04-09T09:59:59.051Z">
+<meta property="article:modified_time" content="2020-04-11T03:33:33.570Z">
 <meta property="article:author" content="魏西">
 <meta property="article:tag" content="前端">
 <meta name="twitter:card" content="summary">
@@ -290,7 +292,38 @@
       <div class="post-body">
         
         
-          
+          <blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><center><font color="#8ec6c5">前言</font></center></h2><p>闭包(closure)是JavaScript语言的一个难点，也是它的特色，很多高级应用都要依靠闭包实现</p>
+</blockquote>
+<hr>
+<h2 id="变量的作用域"><a href="#变量的作用域" class="headerlink" title="变量的作用域"></a>变量的作用域</h2><p>  <font color="#dd2c00">*</font>要理解闭包，首先必须理解JavaScript特殊的变量作用域<br>  变量的作用域无非就两种： <font color="#4cd3c2">全局变量</font>和<font color="#f78259">局部作用域</font><br>  JavaJcript语言的特殊之处，就在于函数内部可以直接读取全局变量</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">var</span> nb=<span class="number">111</span>;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    alert(nb);</span><br><span class="line">&#125;</span><br><span class="line">fn();</span><br></pre></td></tr></table></figure>
+<p>   反而在函数内部声明的变量外部无法访问！</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">   <span class="keyword">var</span> nb=<span class="number">222</span>;</span><br><span class="line">&#125;</span><br><span class="line"> alert(nb);</span><br></pre></td></tr></table></figure>
+<p> <font color="#dd2c00">*</font>需要注意的地方就是，在函数内部声明变量的时候，一定要用var命令，则声明了一个全局匿名变量。</p>
+  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    nb=<span class="number">222</span>;</span><br><span class="line">&#125;</span><br><span class="line"> alert(nb); <span class="number">222</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="怎么在函数外部读取函数内部声明的变量？"><a href="#怎么在函数外部读取函数内部声明的变量？" class="headerlink" title="怎么在函数外部读取函数内部声明的变量？"></a>怎么在函数外部读取函数内部声明的变量？</h2><p><font color="#21bf73"> ok</font> 那只有在函数内部，再定义一个函数。如下</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    nb=<span class="number">222</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       alert(nb); <span class="number">222</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 解读：在上面代码中，函数fn2就被包含在函数fn内部，这时fn内部的所有局部变量，对于fn2来说都是可见的。但是反过来就不行，fn2内部中的局部变量，对fn就是不可见的。这种模式就是javascript语言特有的”链式作用域”结构<br> 子对象会一级一级地向上寻找所有父对象的变量，所以，父对象的所有变量，对子对象来说都是可见的，反之不成立。<br> 既然 fn2可以读取fn中的局部变量，那么只要把fn2作为返回值，就可以读取了！</p>
+ <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    nb=<span class="number">222</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">       alert(nb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> fn2</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> con=fn();</span><br><span class="line">    con(); <span class="comment">//222</span></span><br></pre></td></tr></table></figure>
+<h2 id="闭包的概念"><a href="#闭包的概念" class="headerlink" title="闭包的概念"></a>闭包的概念</h2><p> 上面所说的fn()函数就是闭包<br> 各种专业文献上对于“闭包”的定义非常抽象，我们可以理解闭包就是能够读取函数其他函数内部变量的函数。<br> 由于在Javascript语言中，只有在函数的子函数才能读取局部变量，因此可以把闭包理解为’定义在函数内部的函数’。</p>
+<p>所以 “闭包”就是将函数内部和函数外部连接起来的一栋桥梁。</p>
+<h2 id="什么是闭包"><a href="#什么是闭包" class="headerlink" title="什么是闭包:"></a>什么是闭包:</h2><p>当内部函数 在定义它的作用域 的外部 被引用时,就创建了该内部函数的闭包 ,如果内部函数引用了位于外部函数的变量,当外部函数调用完毕后,这些变量在内存不会被 释放,因为闭包需要它们.</p>
+<h2 id="闭包的用途"><a href="#闭包的用途" class="headerlink" title="闭包的用途"></a>闭包的用途</h2><p> 闭包的用途有很多，其中有两个常用的地方，一个是前面所说可以访问函数内部的变量，另一个就是让这些函数内部的变量始终保存在内存中。<br> 怎么来理解呐？ </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> nb=<span class="number">222</span>;</span><br><span class="line">    nbAdd=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;nb+<span class="number">1</span>&#125;;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">fn2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        alert(nb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> fn2</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> con =fn();</span><br><span class="line">con(); <span class="comment">//222</span></span><br><span class="line">nbAdd();</span><br><span class="line">con(); <span class="comment">//223</span></span><br></pre></td></tr></table></figure>
+<p>在上面代码中，con实际就是fn2的闭包函数。它一共运行了两次，第一次是222，第二次是223，得知，函数fn中的nb变量一直保存在内存中，并没有在fn调用之后自动清除。<br>为什么会这样呐？<br> 原因就在于fn是fn2的父函数，而fn2被赋给了一个全局变量，fn2一直存在于内存中，而fn2的存在依赖于fn，因此fn也始终存在内存中，不会在调用结束后，被垃圾回收机制回收。<br> <font color="#dd2c00">*</font>需要注意的地方就是，nbAdd函数为匿名函数，没有用var关键字声明所以是一个全局变量，不是局部变量。匿名函数本身也是一种闭包。</p>
+<h2 id="使用闭包的注意点"><a href="#使用闭包的注意点" class="headerlink" title="使用闭包的注意点"></a>使用闭包的注意点</h2><p>  关于使用闭包有哪些需要注意的地方，我相信有不少开发者在接触Javascript的时候就有过初步了解。针对以上问题总结如下</p>
+<ol>
+<li><p>由于闭包会使得函数内部的变量都被保存在内存中，对于内存消耗很大，所以不能滥用闭包，否则会造成很多性能问题。在IE中可能导致内存泄漏。<br>解决以上问题就是，在调用之后清除不使用的局部变量。</p>
+</li>
+<li><p>闭包会在父函数外部，改变父函数内部的值，所以，如果把父函数当做对象使用，把闭包当做公用的方法，把内部变量当做它的私有属性，也不要随便改变父函数内部的值。</p>
+<h2 id="闭包思考题"><a href="#闭包思考题" class="headerlink" title="闭包思考题"></a>闭包思考题</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> name=<span class="string">"前端圈圈"</span>;</span><br><span class="line"><span class="keyword">var</span> object=&#123;</span><br><span class="line">    name:<span class="string">'魏西'</span>,</span><br><span class="line">    getName:<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">this</span>.name;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">alert(object.getName()()); <span class="comment">//前端圈圈</span></span><br></pre></td></tr></table></figure>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>理解闭包是成为高级开发工程师过程中的必经之路，理解闭包才能写出更优雅高效的代码。</p>
+</li>
+</ol>
+
         
       </div>
       
@@ -344,8 +377,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            关于作者
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -427,6 +469,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量的作用域"><span class="nav-number">2.</span> <span class="nav-text">变量的作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么在函数外部读取函数内部声明的变量？"><span class="nav-number">3.</span> <span class="nav-text">怎么在函数外部读取函数内部声明的变量？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包的概念"><span class="nav-number">4.</span> <span class="nav-text">闭包的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是闭包"><span class="nav-number">5.</span> <span class="nav-text">什么是闭包:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包的用途"><span class="nav-number">6.</span> <span class="nav-text">闭包的用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用闭包的注意点"><span class="nav-number">7.</span> <span class="nav-text">使用闭包的注意点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#闭包思考题"><span class="nav-number">8.</span> <span class="nav-text">闭包思考题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结语"><span class="nav-number">9.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
         <div class="back-to-top">
@@ -461,7 +519,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">1.5k</span>
+    <span title="Site words total count">2.8k</span>
   
 </div>
 <span id="sitetime"></span>
